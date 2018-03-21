@@ -3,13 +3,14 @@ sensor_z = 3;
 
 z = @(x,y) sqrt(k - (((x-2).^2) + ((y-2).^2))) + 2;
 I= @(x,y) sin(pi*x/3)*sin(pi*y/4)+1;
-h = 0.05;
+h = 0.25;
 
-% Grid where gradient of Phi crosses positive z values
+% Grid D where gradient of Phi crosses positive z values
 gradX = 1:h:3;
 gradY = 1.5:h:2.5;
 
-% Grid for when gradient of Phi crosses negative z values
+% Grid A for when gradient of Phi crosses negative z values. In this case,
+% the area is smaller than grid D. 
 
 
 length_gradX = length(gradX);
@@ -36,7 +37,7 @@ for i = 1:length_gradX
     end
 end
 
-
+[X,Y] = meshgrid(ex,wy);
 
 
 mI = zeros(length_gradX,length_gradY);
@@ -50,16 +51,21 @@ end
 
 for i= 2:length_gradX-1
     for j=2:length_gradY-1
-       ef(i,j) = ((mI(i,j) + mI(i,j))*(P(i,j+1) - P(i,j))...
+       ef(i,j) = ((mI(i,j+1) + mI(i,j))*(P(i,j+1) - P(i,j))...
            - ((mI(i,j) + mI(i,j-1))*(P(i,j)-P(i,j-1)))...
            + (mI(i+1,j)+mI(i,j))*(P(i+1,j)-P(i,j))...
            - (mI(i,j)+mI(i-1,j)*(P(i,j) - P(i-1,j))))/(2*(h^2));
     end
 end
-% 
-% [pp, lambda] = TIENeumann(mI,ef,h,0);
+figure
+surf(gX',gY',P)
+
+approxP=TIENeumann(mI,ef,h,0)
+figure
+surf(gX',gY',approxP)
+
+% Calculating Phi(x,y, z(x,y)):
 
 
 
 
-%size(gradP)
