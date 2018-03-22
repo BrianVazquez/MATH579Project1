@@ -1,13 +1,13 @@
 % %good example
-% A=4;B=5;C=2;
-% k=4;
-% a1=1;a2=4;
-% b1=1;b2=3;
+A=4;B=5;C=2;
+k=4;
+a1=1;a2=4;
+b1=1;b2=3;
 %---random example
-A=8;B=15;C=2;
-a1=1; a2=5;
-b1=1; b2=3;
-k=3;
+% A=8;B=15;C=2;
+% a1=1; a2=5;
+% b1=1; b2=3;
+% k=3;
 %---
 n=25;
 rz=7;
@@ -34,7 +34,8 @@ for i=1:lengthx
         rx(i,j)=x(i)+gradp(1)*t;
         ry(i,j)=y(j)+gradp(2)*t; 
         
-        tempk=(((rx(i,j)-A)^2)/(A^2))+(((ry(i,j)-B)^2)/(B^2))+(((rz-C)^2)/(C^2));
+        tempk=(((rx(i,j)-A)^2)/(A^2))+(((ry(i,j)-B)^2)...
+            /(B^2))+(((rz-C)^2)/(C^2));
         P(i,j)=(k-tempk);
     end
 end
@@ -44,7 +45,7 @@ end
 % surf(X,P)
 
 alpha=3; beta=5;
-I=@(x,y) sin(pi*x/alpha)*sin(pi*y/beta);
+I=@(x,y) sin(pi*x/alpha)*sin(pi*y/alpha);
 
 mI=zeros(lengthx,lengthy);
 for i=1:lengthx
@@ -72,7 +73,8 @@ B2=max(max(ry));
 approxsurf=phase2surf(P,15,rz,a1,a2,b1,b2,h,A1,A2,B1,B2);
 subplot(2,2,1)
 % [gridX,gridY]=meshgrid(x,y);
-surf(x',y',((approxsurf)+P+rz*ones(lengthx,lengthy))')
+[x,y] = meshgrid(senseX,senseY);
+surf(x,y,((approxsurf)+P+rz))
 % surf(x',y',approxsurf')
 title('Approx')
 
@@ -83,6 +85,7 @@ title('Actual')
 subplot(2,2,3)
 surf(x',y',(P)')
 title('P')
+
 
 
 error=norm(approxsurf+P+rz*ones(lengthx,lengthy)-zvalues)/norm(zvalues)
